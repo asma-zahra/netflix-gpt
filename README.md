@@ -85,7 +85,7 @@ or Use command
          });
 
 
-Redux Store(Whenever a user is logged in then we push the user data in redux store in a central place so that we can use it anywhere in the AAP )
+-Redux Store(Whenever a user is logged in then we push the user data in redux store in a central place so that we can use it anywhere in the aap )
     - install redux tolkit
     npm i -D @redux/toolkit
     - install redux
@@ -94,16 +94,44 @@ Redux Store(Whenever a user is logged in then we push the user data in redux sto
     - Create userSlice
     - add Slice reducer in Store
     -Provide Store to react app
+    - on click on sign in button, we will dispatch an action, which will update the ruder func, which will update userinfo in userSlice, that's how our Store got updated
+
+    note- we want to push user data when we sign or sign out or logout, so instead of dispatching an action on each time on sign in then sign out then logout, so instead on this writing code again, we will dispatch an action when userAuthStateChange() change, this API firebase give to us. means jab bhi user autication state change hogi (sign in , sign out, logout), to we will dispatch an action and push the user date with action.payload and and ruder fuc chamge and Store modified with user data.
+    userAuthStateChange() is a event listener, it will be call again and again, so we want to called it once component will render. useEfect with empty array.
+    import { getAuth, onAuthStateChanged } from "firebase/auth";
+
+const auth = getAuth();
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    // User is signed in, see docs for a list of available properties
+    // https://firebase.google.com/docs/reference/js/auth.user
+    const uid = user.uid;
+    // ... call dispacth an action addUser
+  } else {
+    // User is signed out
+    // ...call dispacth an action removeUser
+  }
+});
+
+- call Firbase SignOUt API onlick on header's Sign out button and navigate to home page once signed out successfully.
+
+- call Firebase updateProfile() API after user is signed in with email and passsword in Login.js
+
+-Bug Fix: 1-Sign up user- display name and photo picture update
+2- if user is logged in successfully then only navigate to browsepage and update store iwth add user info, if not logged in menas sign out remve user info fro store and navigate to home page
+
+-When component unmount , unsuscribe to event listener, write a clean up function
+firebase give unscribe function call it while unmounting
+unsubscribe when component unmounts
+
+- for every long string and and all hardcoded value like logo photo url BG URL , keep in Constant.js file and export directly.
+
+- login TMDB website which has movie database. create your deveploer webapp to generate your API key
+- read documentation how to use TMDB API access token , how to call API etc.
+
+
+
     
-
-
-
-
-
-    
-
-
-
 
 Feature
 - login (Login.js)

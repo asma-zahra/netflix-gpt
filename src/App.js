@@ -7,10 +7,8 @@ function App() {
     <div className="">
       <Provider store={appStore}>
       <Body/>
-      </Provider>
-      
+      </Provider> 
     </div>
   );
 }
-
 export default App;
