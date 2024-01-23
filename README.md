@@ -126,8 +126,42 @@ unsubscribe when component unmounts
 
 - for every long string and and all hardcoded value like logo photo url BG URL , keep in Constant.js file and export directly.
 
-- login TMDB website which has movie database. create your deveploer webapp to generate your API key
+- login TMDB website which has movie database. create your deveploer webapp to generate your API key and access token
 - read documentation how to use TMDB API access token , how to call API etc.
+- Get data from TMDB now Playing Movie list API
+- Browse page me we called Movie list API Async function under useeffect.
+- in console everything has showing two times, it is beacuse of strict mode, comment strict mode in index.js, manifest.js in index.html link comment which is giving error in console, 
+
+-Upto now we have login user data in Redux store.Now let's put our Movie data at Redux Store, So that we can access this data anywhere.
+    - let's create MoviesSlice to put all movie data
+    - add MoviesSlice into Store
+    - check in redux tool, you will see MovieSlice with null value as we have added data uning dispatch
+    -Dispatch an action(nowPlayingMovies): nowPlaying movies ka data.json jo mila data API se, usse movieSlice dispatch an action(nowPlayingMovies) krke payload se load kr deng 
+    - we fetch data from API, and dispatch action se pushed data in Store, we will extract this code from Browse and add it in pur custom hook, to make the Browse component clean useNowPlayingMovies custom hook
+
+- Sturctire of Browse page plan
+ {/* structure of Browse page
+            Main container
+            - Video Background: get trailer from TMBD Movies-> Video section call the API to get trailer, this will give you trailer of that movie, by giving movie id/series id, check the response of API in TMDB, just test API by gving series id
+            - fetch data for Trailer video
+            -update Store with Trailer video data
+            9 result ka 9 th key se milega tailer which is availble on youtube,so just use key
+            - using that tailer key, open youtube tailer with that key. copy that embed iframe code in Show it on UI
+            - replace static key with dynamic key
+            - make youtube tariler video mute and autoplay
+            -Video Title : Title and overview 
+            Second container*n
+                - MoeviesList: Now Palying
+                - MovieCard *n
+                - MoeviesList: Trending
+                - MovieCard *n
+                - MoeviesList: Horror
+                - MovieCard *n
+             */}\
+        - find CMDB Image URL for MOEVIE poster : attach the poster id wich is given in API = to get full image movies paster path
+        - read nowplaying movies data from store and it gives 20mvies pas it as propes to movielist and map these array in morviecard component
+    
+
 
 
 
