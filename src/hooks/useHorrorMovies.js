@@ -1,10 +1,11 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { API_KEY_OPTIONS } from "../utils/Constants";
 import { addHorrorMovies } from "../utils/moviesSlice";
 import { useEffect } from "react";
 
 const useHorrorMovies = ()=>{
     const dispatch = useDispatch();
+    const horrorMovies = useSelector (store=>store.movies.horrorMovies);
 
     //fetch horror movies data
     const fetchHorrorMovies = async ()=>{
@@ -16,7 +17,9 @@ const useHorrorMovies = ()=>{
     }
 
     useEffect(()=>{
-        fetchHorrorMovies();
+// above we read the horrorMovies movies, if there is no horrorMovies movies in the store, then only make API call
+    //memoization concept
+       !horrorMovies && fetchHorrorMovies();
     },[])
 
 

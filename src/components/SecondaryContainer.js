@@ -9,7 +9,7 @@ const SecondaryContainer = ()=>{
     const horrorMovies = useSelector (store=>store.movies.horrorMovies);
     
     return(
-        <div>
+        <div className=" bg-black ">
             <MovieList movies={NowPlayingMovies} title={"Now Playing"}/>
             <MovieList movies={PopularMovies} title={"Trending"}/>
             <MovieList movies={topRatedMovies} title={"Top Rated"}/>

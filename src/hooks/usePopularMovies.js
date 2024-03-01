@@ -19,6 +19,8 @@ const usePopularMovies = () => {
   };
 
   useEffect(() => {
+     // above we read the popular movies, if there is no popular movies in the store, then only make API call
+    //memoization concept
     !popularMovies && getPopularMovies();
   }, []);
 };

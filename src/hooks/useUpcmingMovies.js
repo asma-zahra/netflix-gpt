@@ -15,6 +15,8 @@ const useUpcomingMovies = ()=>{
     }
 
     useEffect(()=>{
+      // above we read the upComingMovies movies, if there is no upComingMovies movies in the store, then only make API call
+    //memoization concept
       !upComingMovies &&  fetchUpcomingMovies();
     }, []);
 }

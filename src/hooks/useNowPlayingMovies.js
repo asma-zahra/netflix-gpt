@@ -20,6 +20,8 @@ const useNowPlayingMovies = () => {
   };
 
   useEffect(() => {
+    // above we read the nowPlaying movies, if there is no nowPlaying movies in the store, then only make API call
+    //memoization concept
     !nowPlayingMovies && getNowPlayingMovies();
   }, []);
 };

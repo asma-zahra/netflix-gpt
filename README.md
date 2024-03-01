@@ -182,6 +182,144 @@ unsubscribe when component unmounts
 
 
     ----------------------------------------------------------------------------------------
+    SEARCH MOVIE SUGGESTION using Search button.
+
+    - make a GPT SEARCH button on HEADER. When clicked show GPT Movies page otherwise Browse page.
+    - for all data related GPT we will dispatch in our store. we will safly store GPT related data . GPT slice in our store. 
+    - so create gptSlice.js just to keep data separte to clean code.
+    - create state to show and hide gpt search   initialState: {
+        showGptSearch: false,
+    }
+    by reducer function we will make this state showGptSearch true. so that we can toggle by clicking on gpt search button
+        reducers: {
+        toggleGptSearchView: (state) => {
+          state.showGptSearch = !state.showGptSearch;
+        },
+        }
+    now import this fuction and use on GPT search button which is in header.js
+    import { toggleGptSearchView } from "../utils/gptSlice";
+    <div className="flex p-2 justify-between">
+              {showGptSearch && (
+                <select
+                  className="p-2 m-2 bg-gray-900 text-white"
+                  onChange={handleLanguageChange}
+                >
+    </div>
+Check - intially in store redux tool kit under gpt showGptSearch:false
+we will click on GPT search button it will call funtion handle GPT click which will dipatch an action toggleGptSearchView and make the state showGptSearch:false to true. so now after click on GPT search button in redux store it will show showGptSearch:true now. means button is getting toggled.
+again click on button again become false. again click again true.
+------------------------------------------------------------------------------
+now if SHowGPT action is true, then only load gpt serach page component in browse page dont show main conatiner and secontainer
+if showGPT action is false , then show  MAin Contianer and Secondary Container in Browse page, don't show gpt search container
+- read from store showGPT action using selector in Browse page
+-------------------------------------
+Create the Structure of GPTSearchPage
+- frist BG_ULR in background, show search bar component and GPTMoviesuggestion componenet in GPTSearch page.
+- Search bar component
+- movies Suggestion component as per search
+- add language select Input and let translate our GPTsearch page into multiple language
+- not even a single conatant, not even button name "Search " should be constant, keep it inside constant file.
+let make languageConstant.js file. put all constant languge here. for search hindi me "khoj" english me serach spanish me "something else"
+- now onlick on select option toggle the hindi to english... "खोज" to "search" for exp
+-----------------------------------------------------------
+Best Parctice- we have created contant file(list language of json. to show in GPTsearchInput) and conatnt array of object(for select language )
+so keep these data inside Redux, so that we can easily change it's State using reducer. for that create a separate Slice "ConfigApp,js" here we will keep all the prefrred language data of app and dark ligh theme data of our app etc.
+- never ever commit console log in production or github
+--------------------------------
+When I slect languge let say spanish , i will call hanleslect fun and give e.taget.value = spanish
+now dispatch an action chnage chnage usme dal do e.traget.value so ab redux me jo intial state lan =en that will become spanish, as we push data in store using dispatch
+read this value according this lang chnage serach bar placeholde and search text language
+
+------------------------------------
+- Multilanguage Search bar
+- dynamic button- when search page to name to hompage taki homepage pe jao...wrna button name GPT search
+- hide selct button when showgpt false
+- GPT API Integration
+  - go to platfrm.open.ai (login with same account as of chat gpt) under API? Keys -> create secret key.
+  give a name= "netfix-gpt-project" once key you get. store open AI key in constant file
+  gpt API is free if is charge 
+  - install library openai, it will give fuction to call aPI
+  - create file openai.js to keep helper function of openAI
+  - in search bar form me input and search button hai as sson we click on search, our 
+  form try to submit by refreshing the page, to prevent refresh, use e.prevent default
+  - input me jo type ho raha usse read ke liye useref ref attach krkdo input me
+  -on click of search button it will call hanldeGptsearch and console search.input.value
+  -based on this search in input, get movie data from open AI
+  -chat gpt is dumb, it will ask question, so to avoid toHaveTextContent, give clear insruction so that it directly give to movie name based on your search, provide this query as a content in api
+  const gptQuery =
+  "Act as a Movie Recommendation system and suggest some movies for the query : " +
+  inputSearchText.current.value+
+  ". only give me names of 5 movies, comma seperated like the example result given ahead. Example Result: Gadar, Sholay, Don, Golmaal, Koi Mil Gaya";
+
+- based on this search in input, get movie data from open AI (by using funtion prvided by openAI library)
+- call gpt api , it will return promise so await for it and make the func handleGptSearch Async.
+  const gptResults = await openai.chat.completions.create({
+    messages: [{ role: "user", content: gptQuery }], // when we click on search, it will show content: gpyQuery result that is basically searchText.current.value.
+    model: "gpt-3.5-turbo",
+  });
+  console.log(gptResults.choices);
+export default openai;
+  };
+  //input in search:funny indian retro movie (we are giving 3 genre)
+ // output: gpt will give result in console for funny indian retro movie
+ object
+ message:
+ content:{"andaaz apna apna", "Hera Feri", "Chuke Chupke", "Jaane bhi do yaaro", "Padosan"}
+ role: Movie assistant
+
+<!-- -Note: open Ai API does not you call the API from Browser bcz APIkey can be leaked. it will give warning error. in error it will also suggest if you really want to make it call open AI from Browser then set dangerouslyAllowBrowser:true;
+  - go to penAI.js and add this flag true
+  const openai = new OpenAI({
+  apiKey: openAI_Key, // This is the default and can be omitted
+  dangerouslyAllowBrowser: true,
+}); -->
+const gptMovies = gptResults.choices?.[0]?.message?.content.split(",");
+
+// ["Andaz Apna Apna", "Hera Pheri", "Chupke Chupke", "Jaane Bhi Do Yaaro", "Padosan"]
+ 
+ - for each movies which we get from searchGPT call TMDB API (movie section query- write movies name ) for Movies poaster and name and other info 
+ - now we got each movie info from TMDB based on our search, let's push these data in stroe(by dispatch an action addGPTMovieResult ) inside GPTslice
+ of action: addGPTMovieResult
+ - so that we can show the datails of each movie on search page or anywhere from store by suscribing stroe with useSlector.
+ - read the movies base on gpt search and show on GPTMovieSuggestin.js page and sgow the movie in MovieList component by reusing the same component.
+---------------------------
+Q- how to hide secret datails API key and all
+A- best way to create .env file
+REACT_AAP: add so that react know it is a key
+REACT_APP_openAI_Key = "key";
+
+and export like this in content.js 
+export const openAI_Key = process.env.REACT_APP_OPENAI_KEY;
+env wont be pushed to github. bcx we will add it to gitignore.
+
+----------------------------------------------
+Moimoization:
+when we goto home page gpt page and vice versa each time it is making API call.
+when data is once present in Store. to ahmesha store me rahega..so no need to make API call again and again to stop this we will use Memoization concept
+ //Read the nowplaying movies data from Store
+  const nowPlayingMovies = useSelector(
+    (store) => store.movies.nowPlayingMovies
+  );
+//getNowPlayingMovies function is making API call for nowPlayingMovies
+
+// above we read the nowPlaying movies, if there is no nowPlaying movies in the store, then only make API call
+    !nowPlayingMovies && getNowPlayingMovies();
+
+    -----------------------------------------------
+    
+
+
+
+ 
+
+  
+
+
+
+
+
+
+
 
 
 Feature

@@ -27,6 +27,8 @@ const useMovieTrailer = (movieId) => {
     dispatch(addTrailerVideo(trailer));
   };
   useEffect(() => {
+    // above we read the trailerVideo , if there is no trailerVideo  in the store, then only make API call
+    //memoization concept
     !trailerVideo && getMovieVideos();
   }, []);
 };

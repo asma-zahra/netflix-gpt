@@ -20,6 +20,8 @@ const useTopRatedMovies = () => {
   };
 
   useEffect(() => {
+     // above we read the topRatedMovies movies, if there is no topRatedMovies movies in the store, then only make API call
+    //memoization concept
     !topRatedMovies && fetchTopRatedMovies();
   }, []);
 };
